@@ -1,0 +1,23 @@
+name: Advisory audit
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  advisory-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Validate advisory identifiers
+        env:
+          CVE_ID: CVE-2021-23337
+          GHSA_ID: GHSA-35jh-r3h4-6jhm
+        shell: bash
+        run: |
+          if [ -z "${CVE_ID}" ] || [ -z "${GHSA_ID}" ]; then
+            echo "Both CVE and GHSA identifiers must be nonempty." >&2
+            exit 1
+          fi
+          printf 'CVE: %s\nGHSA: %s\n' "${CVE_ID}" "${GHSA_ID}"
